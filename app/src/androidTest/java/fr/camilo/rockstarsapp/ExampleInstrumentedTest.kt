@@ -1,4 +1,4 @@
-package fr.camilo.rockstartapp
+package fr.camilo.rockstarsapp
 
 import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4

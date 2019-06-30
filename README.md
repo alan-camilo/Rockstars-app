@@ -1,2 +1,2 @@
-# Rockstar-app
+# Rockstars-app
 Optimetriks Android Test

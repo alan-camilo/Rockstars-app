@@ -1,4 +1,4 @@
-package fr.camilo.rockstartapp
+package fr.camilo.rockstarsapp
 
 import org.junit.Test
 

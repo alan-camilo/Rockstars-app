@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">Rockstart App</string>
+    <string name="app_name">Rockstars</string>
+    <string name="rockstars">Rockstars</string>
+    <string name="bookmarks">Bookmarks</string>
+    <string name="profile">Profile</string>
+    <string name="search_hint">Search a Rockstar</string>
+    <string name="profile_name_hint">Your name</string>
+    <string name="save">Save</string>
 </resources>
