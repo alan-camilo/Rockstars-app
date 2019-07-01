@@ -27,11 +27,10 @@
             app:layout_constraintBottom_toTopOf="@id/navigator" android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp">
 
-        <androidx.recyclerview.widget.RecyclerView
+        <FrameLayout
+                android:id="@+id/list"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:layout_editor_absoluteY="64dp"
-                tools:layout_editor_absoluteX="8dp"/>
+                android:layout_height="match_parent"/>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

@@ -5,5 +5,6 @@ data class Rockstar(
     val about: String,
     val index: Int,
     val name: String,
-    val picture: String
+    val picture: String,
+    val bookmark: Boolean?
 )

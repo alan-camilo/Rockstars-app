@@ -6,4 +6,6 @@
     <string name="search_hint">Search a Rockstar</string>
     <string name="profile_name_hint">Your name</string>
     <string name="save">Save</string>
+    <string name="rockstar_picture">Rockstar picture</string>
+    <string name="action_button">action button</string>
 </resources>

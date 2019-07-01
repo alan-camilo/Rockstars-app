@@ -6,6 +6,7 @@ buildscript {
         kodein_version = '6.3.2'
         retrofit_version = '2.6.0'
         room_version = '2.1.0'
+        picasso_version = '2.71828'
     }
     repositories {
         google()

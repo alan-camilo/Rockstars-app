@@ -1,13 +1,12 @@
 package fr.camilo.rockstarsapp.activity
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.navigator.*
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import fr.camilo.rockstarsapp.R
+import kotlinx.android.synthetic.main.navigator.*
 
 
 class ProfileActivity : AppCompatActivity() {
@@ -33,7 +32,7 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when(item?.itemId) {
+        when (item?.itemId) {
             R.id.action_save -> Unit //TODO
         }
         return super.onOptionsItemSelected(item)
