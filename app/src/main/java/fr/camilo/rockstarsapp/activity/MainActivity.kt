@@ -2,6 +2,7 @@ package fr.camilo.rockstarsapp.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -10,6 +11,7 @@ import fr.camilo.rockstarsapp.fragment.RockstarListFragment
 import fr.camilo.rockstarsapp.util.Constants
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.navigator.*
+
 
 class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
     lateinit var fragment: Fragment
@@ -35,6 +37,20 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         }
 
         swiperefresh.setOnRefreshListener(this)
+
+        val searchWidget = search_view
+        searchWidget.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                (fragment as RockstarListFragment).filterList(p0 ?: "")
+                return true
+            }
+
+            override fun onQueryTextChange(p0: String?): Boolean {
+                (fragment as RockstarListFragment).filterList(p0 ?: "")
+                return true
+            }
+
+        })
     }
 
     override fun onRefresh() {

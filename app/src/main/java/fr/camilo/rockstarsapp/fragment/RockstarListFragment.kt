@@ -25,6 +25,7 @@ class RockstarListFragment(val activityType: Constants) : Fragment() {
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
     private var myDataset = arrayListOf<Rockstar>()
+    private var myDatasetBak = arrayListOf<Rockstar>()
     private lateinit var model: RockstarsViewModel
     private var swiperefresh: SwipeRefreshLayout? = null
     private val bookmarkAction = { isEnabled: Boolean, index: Int ->
@@ -34,6 +35,7 @@ class RockstarListFragment(val activityType: Constants) : Fragment() {
     private val deleteAction = { _: Boolean, index: Int ->
         model.removeFromBookmark(myDataset[index].index)
         myDataset.remove(myDataset[index])
+        myDatasetBak.remove(myDatasetBak[index])
         recyclerView.adapter!!.notifyDataSetChanged()
         Unit
     }
@@ -77,6 +79,7 @@ class RockstarListFragment(val activityType: Constants) : Fragment() {
                 model.getRockstars().observe(this, Observer<List<Rockstar>> {
                     Log.d("DEBUGLIST", "observer called $it")
                     myDataset.addAll(it)
+                    myDatasetBak.addAll(it)
                     recyclerView.adapter!!.notifyDataSetChanged()
                 })
             }
@@ -84,6 +87,7 @@ class RockstarListFragment(val activityType: Constants) : Fragment() {
                 model.getBookmarks().observe(this, Observer<List<Rockstar>> {
                     Log.d("DEBUGLIST", "observer called $it")
                     myDataset.addAll(it)
+                    myDatasetBak.addAll(it)
                     recyclerView.adapter!!.notifyDataSetChanged()
                 })
             }
@@ -99,12 +103,24 @@ class RockstarListFragment(val activityType: Constants) : Fragment() {
 
     fun refreshList(callback: () -> Unit) {
         myDataset.clear()
+        myDatasetBak.clear()
         recyclerView.adapter!!.notifyDataSetChanged()
         model.getRockstars(true).observe(this, Observer<List<Rockstar>> {
             Log.d("DEBUGLIST", "refresh observer called $it")
             myDataset.addAll(it)
+            myDatasetBak.addAll(it)
             recyclerView.adapter!!.notifyDataSetChanged()
             callback()
         })
+    }
+
+    fun filterList(str: String) {
+        myDataset.clear()
+        if (str !== "") {
+            myDataset.addAll(myDatasetBak.filter { it.name.toLowerCase().startsWith(str) })
+        } else {
+            myDataset.addAll(myDatasetBak)
+        }
+        recyclerView.adapter!!.notifyDataSetChanged()
     }
 }
