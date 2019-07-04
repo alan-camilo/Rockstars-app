@@ -8,7 +8,7 @@ import fr.camilo.rockstarsapp.db.dao.RockstarDao
 import fr.camilo.rockstarsapp.db.entity.RockstarEntity
 
 @Database(entities = [RockstarEntity::class], version = 1)
-public abstract class RockstarDatabase : RoomDatabase() {
+abstract class RockstarDatabase : RoomDatabase() {
     abstract fun rockstarDao(): RockstarDao
 
     companion object {
@@ -24,7 +24,7 @@ public abstract class RockstarDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     RockstarDatabase::class.java,
-                    "Word_database"
+                    "rockstar_database"
                 ).build()
                 INSTANCE = instance
                 return instance

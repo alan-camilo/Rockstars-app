@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import fr.camilo.rockstarsapp.R
 import fr.camilo.rockstarsapp.fragment.RockstarListFragment
+import fr.camilo.rockstarsapp.util.Constants
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.navigator.*
 
@@ -19,7 +20,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
-        fragment = RockstarListFragment()
+        fragment = RockstarListFragment(Constants.MAIN_ACTIVITY)
         fragmentTransaction.add(R.id.list, fragment)
         fragmentTransaction.commit()
 

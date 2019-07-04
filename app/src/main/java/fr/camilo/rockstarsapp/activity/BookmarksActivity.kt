@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import fr.camilo.rockstarsapp.R
 import fr.camilo.rockstarsapp.fragment.RockstarListFragment
+import fr.camilo.rockstarsapp.util.Constants
 import kotlinx.android.synthetic.main.navigator.*
 
 class BookmarksActivity : AppCompatActivity() {
@@ -15,7 +16,7 @@ class BookmarksActivity : AppCompatActivity() {
 
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
-        val fragment = RockstarListFragment()
+        val fragment = RockstarListFragment(Constants.BOOKMARKS_ACTIVITY)
         fragmentTransaction.add(R.id.list, fragment)
         fragmentTransaction.commit()
 
