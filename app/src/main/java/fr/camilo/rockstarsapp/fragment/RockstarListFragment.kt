@@ -15,11 +15,12 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import fr.camilo.rockstarsapp.R
 import fr.camilo.rockstarsapp.model.Rockstar
 import fr.camilo.rockstarsapp.ui.RockstarsAdapter
+import fr.camilo.rockstarsapp.util.ACTIVITY_TYPE
 import fr.camilo.rockstarsapp.util.Constants
 import fr.camilo.rockstarsapp.viewmodel.RockstarsViewModel
 import kotlinx.android.synthetic.main.rockstar_row.*
 
-class RockstarListFragment(val activityType: Constants) : Fragment() {
+class RockstarListFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
@@ -51,14 +52,20 @@ class RockstarListFragment(val activityType: Constants) : Fragment() {
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-        //setContentView(R.layout.fragment_list)
+        val activityType = arguments!!.getString(ACTIVITY_TYPE)
+        Log.d("DEBUG_LIST", "$activityType")
         swiperefresh = activity?.findViewById(R.id.swiperefresh)
 
         viewManager = LinearLayoutManager(activity)
 
         viewAdapter = when (activityType) {
-            Constants.MAIN_ACTIVITY -> RockstarsAdapter(myDataset, activityType, bookmarkAction)
-            Constants.BOOKMARKS_ACTIVITY -> RockstarsAdapter(myDataset, activityType, deleteAction)
+            Constants.MAIN_ACTIVITY.value -> RockstarsAdapter(myDataset, Constants.MAIN_ACTIVITY, bookmarkAction)
+            Constants.BOOKMARKS_ACTIVITY.value -> RockstarsAdapter(
+                myDataset,
+                Constants.BOOKMARKS_ACTIVITY,
+                deleteAction
+            )
+            else -> RockstarsAdapter(myDataset, Constants.MAIN_ACTIVITY, bookmarkAction)
         }
         recyclerView = activity!!.findViewById<RecyclerView>(R.id.recycler_view).apply {
             // use this setting to improve performance if you know that changes
@@ -75,7 +82,7 @@ class RockstarListFragment(val activityType: Constants) : Fragment() {
 
         model = ViewModelProviders.of(this).get(RockstarsViewModel::class.java)
         when (activityType) {
-            Constants.MAIN_ACTIVITY -> {
+            Constants.MAIN_ACTIVITY.value -> {
                 model.getRockstars().observe(this, Observer<List<Rockstar>> {
                     Log.d("DEBUGLIST", "observer called $it")
                     myDataset.addAll(it)
@@ -83,7 +90,7 @@ class RockstarListFragment(val activityType: Constants) : Fragment() {
                     recyclerView.adapter!!.notifyDataSetChanged()
                 })
             }
-            Constants.BOOKMARKS_ACTIVITY -> {
+            Constants.BOOKMARKS_ACTIVITY.value -> {
                 model.getBookmarks().observe(this, Observer<List<Rockstar>> {
                     Log.d("DEBUGLIST", "observer called $it")
                     myDataset.addAll(it)
