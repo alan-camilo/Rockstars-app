@@ -123,7 +123,7 @@ class RockstarListFragment : Fragment() {
 
     fun filterList(str: String) {
         myDataset.clear()
-        if (str !== "") {
+        if (str != "") {
             myDataset.addAll(myDatasetBak.filter { it.name.toLowerCase().startsWith(str) })
         } else {
             myDataset.addAll(myDatasetBak)

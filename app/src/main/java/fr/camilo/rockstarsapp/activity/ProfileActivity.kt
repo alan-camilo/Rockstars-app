@@ -7,8 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Matrix
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -21,14 +19,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.exifinterface.media.ExifInterface
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import fr.camilo.rockstarsapp.R
+import fr.camilo.rockstarsapp.util.ImageRotation
+import fr.camilo.rockstarsapp.viewmodel.ProfileViewModel
 import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.navigator.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -41,6 +38,7 @@ class ProfileActivity : AppCompatActivity() {
     var currentPhotoPath: String = ""
     val PREF_PICTURE_URI = "pref_picture_uri"
     val PREF_FULL_NAME = "pref_full_name"
+    private lateinit var model: ProfileViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,11 +59,18 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         val sharedPref = this.getPreferences(Context.MODE_PRIVATE) ?: return
-        val picture_uri = sharedPref.getString(PREF_PICTURE_URI, "")
+        //val picture_uri = sharedPref.getString(PREF_PICTURE_URI, "")
         val full_name = sharedPref.getString(PREF_FULL_NAME, "")
 
         if (full_name != "") name_tv.setText(full_name!!)
-        if (picture_uri != "") {
+
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        model.getProfilePicture().observe(this, Observer<Bitmap> {
+            Log.d("PICTURE_DEBUG", "observer called")
+            if (it != null) profile_picture.setImageBitmap(it)
+        })
+
+        /*if (picture_uri != "") {
             GlobalScope.launch(Dispatchers.IO) {
                 val rotatedBitmap = rotateBitmap(picture_uri)
                 if (rotatedBitmap != null) {
@@ -73,7 +78,7 @@ class ProfileActivity : AppCompatActivity() {
                     withContext(Dispatchers.Main) { profile_picture.setImageBitmap(rotatedBitmap) }
                 }
             }
-        }
+        }*/
     }
 
     private fun takePicture() {
@@ -89,15 +94,6 @@ class ProfileActivity : AppCompatActivity() {
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
         startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
 
-    }
-
-    fun rotateImage(source: Bitmap, angle: Float): Bitmap {
-        val matrix = Matrix()
-        matrix.postRotate(angle);
-        return Bitmap.createBitmap(
-            source, 0, 0, source.getWidth(), source.getHeight(),
-            matrix, true
-        );
     }
 
     @Throws(IOException::class)
@@ -120,38 +116,12 @@ class ProfileActivity : AppCompatActivity() {
 
             //To get the File for further usage
             val auxFile = File(currentPhotoPath)
-            val rotatedBitmap = rotateBitmap(currentPhotoPath)
+            val rotatedBitmap = ImageRotation().rotateBitmap(currentPhotoPath)
             if (rotatedBitmap != null) {
                 Log.d("PROFILE_ACTIVITY", "onActivityResult set profile picture")
                 profile_picture.setImageBitmap(rotatedBitmap)
             }
         }
-    }
-
-    fun rotateBitmap(uri: String): Bitmap? {
-        val bitmap: Bitmap? = BitmapFactory.decodeFile(uri)
-        Log.d("PROFILE_ACTIVITY", "$uri")
-
-        val ei = ExifInterface(uri)
-        val orientation = ei.getAttributeInt(
-            ExifInterface.TAG_ORIENTATION,
-            ExifInterface.ORIENTATION_UNDEFINED
-        )
-
-        var rotatedBitmap: Bitmap? = null
-        when (orientation) {
-            ExifInterface.ORIENTATION_ROTATE_90 ->
-                rotatedBitmap = rotateImage(bitmap!!, 90F)
-
-            ExifInterface.ORIENTATION_ROTATE_180 ->
-                rotatedBitmap = rotateImage(bitmap!!, 180F);
-
-            ExifInterface.ORIENTATION_ROTATE_270 ->
-                rotatedBitmap = rotateImage(bitmap!!, 270F);
-
-            else -> rotatedBitmap = bitmap
-        }
-        return rotatedBitmap
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -165,9 +135,10 @@ class ProfileActivity : AppCompatActivity() {
                 val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
                 with(sharedPref.edit()) {
                     putString(PREF_FULL_NAME, name_tv.text.toString())
-                    putString(PREF_PICTURE_URI, currentPhotoPath)
-                    commit()
+                    //putString(PREF_PICTURE_URI, currentPhotoPath)
+                    apply()
                 }
+                model.setProfilePicture(currentPhotoPath)
                 Toast.makeText(this, getString(R.string.saved), Toast.LENGTH_SHORT).show()
             }
         }
