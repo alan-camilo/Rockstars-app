@@ -1,4 +1,4 @@
-# Rockstar-app
+# Rockstars-app
 Optimetriks Android Test
 
 This app uses the following patterns :
