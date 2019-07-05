@@ -5,20 +5,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import fr.camilo.rockstarsapp.R
 import fr.camilo.rockstarsapp.model.Rockstar
 import fr.camilo.rockstarsapp.ui.RockstarsAdapter
 import fr.camilo.rockstarsapp.util.ACTIVITY_TYPE
 import fr.camilo.rockstarsapp.util.Constants
 import fr.camilo.rockstarsapp.viewmodel.RockstarsViewModel
-import kotlinx.android.synthetic.main.rockstar_row.*
 
 class RockstarListFragment : Fragment() {
 

@@ -131,7 +131,7 @@ class ProfileActivity : AppCompatActivity() {
                     apply()
                 }
                 //save the picture
-                model.setProfilePicture(currentPhotoPath)
+                if (currentPhotoPath != "") model.setProfilePicture(currentPhotoPath)
                 //user feedback
                 Toast.makeText(this, getString(R.string.saved), Toast.LENGTH_SHORT).show()
             }

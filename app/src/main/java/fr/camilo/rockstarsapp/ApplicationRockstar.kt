@@ -14,6 +14,6 @@ class ApplicationRockstar : Application(), KodeinAware {
     //Dependency injection configuration
     override val kodein by Kodein.lazy {
         bind<RockstarDao>() with singleton { RockstarDatabase.getDatabase(applicationContext).rockstarDao() }
-        bind<RockstarRepository>() with singleton { RockstarRepository( instance() ) }
+        bind<RockstarRepository>() with singleton { RockstarRepository(instance(), this@ApplicationRockstar) }
     }
 }
