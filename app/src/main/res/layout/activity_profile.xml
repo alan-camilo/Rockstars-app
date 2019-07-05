@@ -37,6 +37,7 @@
             android:layout_marginBottom="48dp">
 
         <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/name_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/profile_name_hint"/>

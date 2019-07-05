@@ -43,6 +43,7 @@ dependencies {
     //hyperion
     debugImplementation 'com.willowtreeapps.hyperion:hyperion-core:0.9.27'
     debugImplementation 'com.willowtreeapps.hyperion:hyperion-crash:0.9.27'
+    debugImplementation 'com.willowtreeapps.hyperion:hyperion-shared-preferences:0.9.27'
     //picasso
     implementation "com.squareup.picasso:picasso:$picasso_version"
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'

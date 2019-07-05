@@ -30,7 +30,7 @@ class RockstarListFragment : Fragment() {
     private lateinit var model: RockstarsViewModel
     private var swiperefresh: SwipeRefreshLayout? = null
     private val bookmarkAction = { isEnabled: Boolean, index: Int ->
-        if (isEnabled) model.addToBookmark(index) else model.removeFromBookmark(index)
+        if (isEnabled) model.addToBookmark(myDataset[index].index) else model.removeFromBookmark(myDataset[index].index)
         Unit
     }
     private val deleteAction = { _: Boolean, index: Int ->
