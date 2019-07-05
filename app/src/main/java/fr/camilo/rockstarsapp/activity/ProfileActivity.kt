@@ -82,7 +82,6 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun takePicture() {
-
         val intent: Intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         val file: File = createFile()
 
@@ -93,7 +92,6 @@ class ProfileActivity : AppCompatActivity() {
         )
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
         startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
-
     }
 
     @Throws(IOException::class)
@@ -114,9 +112,8 @@ class ProfileActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
 
-            //To get the File for further usage
-            val auxFile = File(currentPhotoPath)
-            val rotatedBitmap = ImageRotation().rotateBitmap(currentPhotoPath)
+            val imageRotation = ImageRotation()
+            val rotatedBitmap = imageRotation.rotateBitmap(currentPhotoPath)
             if (rotatedBitmap != null) {
                 Log.d("PROFILE_ACTIVITY", "onActivityResult set profile picture")
                 profile_picture.setImageBitmap(rotatedBitmap)

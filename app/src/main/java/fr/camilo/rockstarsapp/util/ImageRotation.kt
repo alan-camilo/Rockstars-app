@@ -42,4 +42,10 @@ class ImageRotation {
             matrix, true
         )
     }
+
+    fun cropImage(source: Bitmap): Bitmap {
+        val matrix = Matrix()
+        matrix.postScale(0.5f, 0.5f)
+        return Bitmap.createBitmap(source, 100, 100, 1422, 800, matrix, true)!!
+    }
 }
