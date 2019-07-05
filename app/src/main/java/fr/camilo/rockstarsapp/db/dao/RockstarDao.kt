@@ -6,6 +6,7 @@ import fr.camilo.rockstarsapp.db.entity.RockstarEntity
 
 @Dao
 interface RockstarDao {
+
     @Query("SELECT * from rockstar_table ORDER BY `index` ASC")
     suspend fun getAll(): List<RockstarEntity>
 

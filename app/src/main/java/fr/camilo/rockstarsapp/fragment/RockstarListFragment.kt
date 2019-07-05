@@ -28,11 +28,12 @@ class RockstarListFragment : Fragment() {
     private var myDataset = arrayListOf<Rockstar>()
     private var myDatasetBak = arrayListOf<Rockstar>()
     private lateinit var model: RockstarsViewModel
-    private var swiperefresh: SwipeRefreshLayout? = null
+    //action for the bookmark star button
     private val bookmarkAction = { isEnabled: Boolean, index: Int ->
         if (isEnabled) model.addToBookmark(myDataset[index].index) else model.removeFromBookmark(myDataset[index].index)
         Unit
     }
+    //action for the bookmark delete button
     private val deleteAction = { _: Boolean, index: Int ->
         model.removeFromBookmark(myDataset[index].index)
         myDataset.remove(myDataset[index])
@@ -40,7 +41,6 @@ class RockstarListFragment : Fragment() {
         recyclerView.adapter!!.notifyDataSetChanged()
         Unit
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,12 +52,13 @@ class RockstarListFragment : Fragment() {
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
+        //get the name of the activity, important for the fragment behaviour
         val activityType = arguments!!.getString(ACTIVITY_TYPE)
         Log.d("DEBUG_LIST", "$activityType")
-        swiperefresh = activity?.findViewById(R.id.swiperefresh)
 
         viewManager = LinearLayoutManager(activity)
 
+        //instantiates the RecyclerView Adapter
         viewAdapter = when (activityType) {
             Constants.MAIN_ACTIVITY.value -> RockstarsAdapter(myDataset, Constants.MAIN_ACTIVITY, bookmarkAction)
             Constants.BOOKMARKS_ACTIVITY.value -> RockstarsAdapter(
@@ -68,18 +69,13 @@ class RockstarListFragment : Fragment() {
             else -> RockstarsAdapter(myDataset, Constants.MAIN_ACTIVITY, bookmarkAction)
         }
         recyclerView = activity!!.findViewById<RecyclerView>(R.id.recycler_view).apply {
-            // use this setting to improve performance if you know that changes
-            // in content do not change the layout size of the RecyclerView
-            //setHasFixedSize(true)
-
             // use a linear layout manager
             layoutManager = viewManager
-
-            // specify an viewAdapter (see also next example)
+            // specify a viewAdapter
             adapter = viewAdapter
-
         }
 
+        //instantiates the ViewModel and populates the dataset
         model = ViewModelProviders.of(this).get(RockstarsViewModel::class.java)
         when (activityType) {
             Constants.MAIN_ACTIVITY.value -> {
@@ -102,12 +98,10 @@ class RockstarListFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
     }
 
-    private fun setUpBookmarkBtn(isEnabled: Boolean) {
-        action_btn.setOnClickListener {
-            Toast.makeText(activity, "fav! $isEnabled", Toast.LENGTH_LONG).show()
-        }
-    }
-
+    /**
+     * Refresh the list making a new http request
+     * @param callback
+     */
     fun refreshList(callback: () -> Unit) {
         myDataset.clear()
         myDatasetBak.clear()
@@ -121,6 +115,9 @@ class RockstarListFragment : Fragment() {
         })
     }
 
+    /**
+     * Filter the list when searching a rockstar
+     */
     fun filterList(str: String) {
         myDataset.clear()
         if (str != "") {

@@ -36,7 +36,6 @@ class ProfileActivity : AppCompatActivity() {
     val PERMISSION_REQUEST_CODE = 2
     val REQUEST_IMAGE_CAPTURE = 1
     var currentPhotoPath: String = ""
-    val PREF_PICTURE_URI = "pref_picture_uri"
     val PREF_FULL_NAME = "pref_full_name"
     private lateinit var model: ProfileViewModel
 
@@ -44,6 +43,7 @@ class ProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
+        //bottom menu buttons
         bookmarks_btn.setOnClickListener {
             val intent = Intent(this, BookmarksActivity::class.java)
             startActivity(intent)
@@ -58,31 +58,24 @@ class ProfileActivity : AppCompatActivity() {
             if (checkPersmission()) takePicture() else requestPermission()
         }
 
+        //check if the profile name exists in the sharedPreferences
         val sharedPref = this.getPreferences(Context.MODE_PRIVATE) ?: return
-        //val picture_uri = sharedPref.getString(PREF_PICTURE_URI, "")
-        val full_name = sharedPref.getString(PREF_FULL_NAME, "")
+        val fullName = sharedPref.getString(PREF_FULL_NAME, "")
+        if (fullName != "") name_tv.setText(fullName!!)
 
-        if (full_name != "") name_tv.setText(full_name!!)
-
+        //instantiate ProfileViewModel
         model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         model.getProfilePicture().observe(this, Observer<Bitmap> {
-            Log.d("PICTURE_DEBUG", "observer called")
+            Log.d("PICTURE_DEBUG", "observer call²ed")
             if (it != null) profile_picture.setImageBitmap(it)
         })
-
-        /*if (picture_uri != "") {
-            GlobalScope.launch(Dispatchers.IO) {
-                val rotatedBitmap = rotateBitmap(picture_uri)
-                if (rotatedBitmap != null) {
-                    Log.d("PROFILE_ACTIVITY", "pref set profile picture")
-                    withContext(Dispatchers.Main) { profile_picture.setImageBitmap(rotatedBitmap) }
-                }
-            }
-        }*/
     }
 
+    /**
+     * Start the camera application to take a picture
+     */
     private fun takePicture() {
-        val intent: Intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         val file: File = createFile()
 
         val uri: Uri = FileProvider.getUriForFile(
@@ -94,6 +87,9 @@ class ProfileActivity : AppCompatActivity() {
         startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
     }
 
+    /**
+     * Create a file with a unique name
+     */
     @Throws(IOException::class)
     private fun createFile(): File {
         // Create an image file name
@@ -111,7 +107,6 @@ class ProfileActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-
             val imageRotation = ImageRotation()
             val rotatedBitmap = imageRotation.rotateBitmap(currentPhotoPath)
             if (rotatedBitmap != null) {
@@ -129,13 +124,15 @@ class ProfileActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.action_save -> {
+                //save the profile name
                 val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
                 with(sharedPref.edit()) {
                     putString(PREF_FULL_NAME, name_tv.text.toString())
-                    //putString(PREF_PICTURE_URI, currentPhotoPath)
                     apply()
                 }
+                //save the picture
                 model.setProfilePicture(currentPhotoPath)
+                //user feedback
                 Toast.makeText(this, getString(R.string.saved), Toast.LENGTH_SHORT).show()
             }
         }
@@ -143,10 +140,12 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun checkPersmission(): Boolean {
-        return (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) ==
-                PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+        return (ContextCompat.checkSelfPermission(
             this,
-            android.Manifest.permission.READ_EXTERNAL_STORAGE
+            CAMERA
+        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+            this,
+            READ_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED)
     }
 
@@ -160,22 +159,16 @@ class ProfileActivity : AppCompatActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         when (requestCode) {
             PERMISSION_REQUEST_CODE -> {
-
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                     && grantResults[1] == PackageManager.PERMISSION_GRANTED
                 ) {
-
                     takePicture()
-
                 } else {
                     Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
                 }
                 return
             }
-
-            else -> {
-
-            }
+            else -> Unit
         }
     }
 }

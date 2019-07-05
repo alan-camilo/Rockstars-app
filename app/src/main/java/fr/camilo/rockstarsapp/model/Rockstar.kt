@@ -10,6 +10,7 @@ data class Rockstar(
     val picture: String,
     var bookmark: Boolean?
 ) {
+
     fun toRockstarEntity(): RockstarEntity = RockstarEntity(
         this._id,
         this.about,

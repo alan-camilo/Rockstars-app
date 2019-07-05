@@ -6,6 +6,7 @@ import retrofit2.http.GET
 
 
 interface RockstarApi {
+
     @GET("bins/19791b")
     fun listRockstars(): Call<ArrayList<Rockstar>>
 }

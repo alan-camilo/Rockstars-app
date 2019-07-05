@@ -15,8 +15,10 @@ class BookmarksActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bookmarks)
 
+        //the bundle indicates to the fragment which behaviour to adopt
         val bundle = Bundle()
         bundle.putString(ACTIVITY_TYPE, Constants.BOOKMARKS_ACTIVITY.value)
+        //instantiates fragment
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         val fragment = RockstarListFragment()
@@ -24,6 +26,7 @@ class BookmarksActivity : AppCompatActivity() {
         fragmentTransaction.add(R.id.list, fragment)
         fragmentTransaction.commit()
 
+        //bottom menu buttons
         profile_btn.setOnClickListener {
             val intent = Intent(this, ProfileActivity::class.java)
             startActivity(intent)

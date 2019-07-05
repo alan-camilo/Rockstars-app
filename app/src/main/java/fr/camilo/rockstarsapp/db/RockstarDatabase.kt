@@ -9,6 +9,7 @@ import fr.camilo.rockstarsapp.db.entity.RockstarEntity
 
 @Database(entities = [RockstarEntity::class], version = 1)
 abstract class RockstarDatabase : RoomDatabase() {
+
     abstract fun rockstarDao(): RockstarDao
 
     companion object {

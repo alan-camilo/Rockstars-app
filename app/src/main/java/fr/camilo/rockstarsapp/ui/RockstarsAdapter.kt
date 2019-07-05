@@ -20,10 +20,7 @@ class RockstarsAdapter(
     RecyclerView.Adapter<RockstarsAdapter.MyViewHolder>() {
 
     // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder.
-    // Each data item is just a string in this case that is shown in a TextView.
-    class MyViewHolder(val linearLayout: LinearLayout) : RecyclerView.ViewHolder(linearLayout) {
+    class MyViewHolder(linearLayout: LinearLayout) : RecyclerView.ViewHolder(linearLayout) {
         val tv_name: TextView = linearLayout.findViewById(R.id.rockstar_name)
         val tv_status: TextView = linearLayout.findViewById(R.id.rockstar_status)
         val iv_picture: ImageView = linearLayout.findViewById(R.id.rockstar_img)
@@ -35,11 +32,10 @@ class RockstarsAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): RockstarsAdapter.MyViewHolder {
+    ): MyViewHolder {
         // create a new view
         val linearLayout = LayoutInflater.from(parent.context)
             .inflate(R.layout.rockstar_row, parent, false) as LinearLayout
-        val action_btn: ImageButton = linearLayout.findViewById(R.id.action_btn)
         return MyViewHolder(linearLayout)
     }
 
@@ -48,9 +44,9 @@ class RockstarsAdapter(
         var isEnabled = myDataset[position].bookmark ?: false
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        val index = myDataset[position].index
         holder.tv_name.text = myDataset[position].name
         holder.tv_status.text = myDataset[position].about
+        //change the icon onClick (full star or border star)
         holder.action_btn.setOnClickListener {
             isEnabled = !isEnabled
             onClick(isEnabled, holder.layoutPosition)
@@ -62,10 +58,11 @@ class RockstarsAdapter(
                 }
             }
         }
+        //change the icon according to the activity (trash or star)
         when (activityType) {
             Constants.MAIN_ACTIVITY -> {
-                val isEnabled = myDataset[position].bookmark ?: false
-                if (isEnabled) {
+                val isBookmark = myDataset[position].bookmark ?: false
+                if (isBookmark) {
                     holder.action_btn.setImageResource(R.mipmap.baseline_star_black_36)
                 } else {
                     holder.action_btn.setImageResource(R.mipmap.baseline_star_border_black_36)
@@ -73,10 +70,9 @@ class RockstarsAdapter(
             }
             Constants.BOOKMARKS_ACTIVITY -> holder.action_btn.setImageResource(R.mipmap.baseline_delete_outline_black_36)
         }
-
+        //load the picture of the rockstar
         Picasso.get().load(myDataset[position].picture).into(holder.iv_picture)
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = myDataset.size
 }

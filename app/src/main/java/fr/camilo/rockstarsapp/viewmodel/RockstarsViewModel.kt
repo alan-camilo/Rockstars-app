@@ -15,6 +15,7 @@ import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance
 
 class RockstarsViewModel(app: Application) : AndroidViewModel(app), KodeinAware {
+
     override val kodein by kodein(getApplication() as Context)
 
     private val repository by instance<RockstarRepository>()
@@ -28,6 +29,10 @@ class RockstarsViewModel(app: Application) : AndroidViewModel(app), KodeinAware 
         viewModelScope.launch(Dispatchers.IO) { repository.loadBookmarks(it) }
     }
 
+    /**
+     * Retrieve rockstars
+     * @param refresh if true, force a http request
+     */
     fun getRockstars(refresh: Boolean = false): LiveData<ArrayList<Rockstar>> {
         if (refresh) {
             rockstars = MutableLiveData<ArrayList<Rockstar>>().also {
@@ -37,10 +42,21 @@ class RockstarsViewModel(app: Application) : AndroidViewModel(app), KodeinAware 
         return rockstars
     }
 
+    /**
+     * Retrieve your favorite rockstars
+     */
     fun getBookmarks(): LiveData<ArrayList<Rockstar>> = bookmarks
 
+    /**
+     * Save a rockstar as a favorite
+     * @param index
+     */
     fun addToBookmark(index: Int) = viewModelScope.launch(Dispatchers.IO) { repository.addToBookmark(rockstars, index) }
 
+    /**
+     * Unset a rockstar as a favourite
+     * @param index
+     */
     fun removeFromBookmark(index: Int) =
         viewModelScope.launch(Dispatchers.IO) { repository.removeFromBookmark(rockstars, index) }
 }

@@ -34,8 +34,15 @@ class ProfileViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
+    /**
+     * Retrieve the profile picture
+     */
     fun getProfilePicture(): LiveData<Bitmap> = profilePicture
 
+    /**
+     * Set a new profile picture
+     * @param uri
+     */
     fun setProfilePicture(uri: String) {
         with(sharedPref.edit()) {
             putString(PREF_PICTURE_URI, uri)

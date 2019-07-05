@@ -51,11 +51,13 @@
                 android:text="name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:id="@+id/rockstar_name"/>
         <TextView
                 android:text="status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:id="@+id/rockstar_status"/>
     </LinearLayout>
 

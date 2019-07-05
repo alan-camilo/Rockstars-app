@@ -8,6 +8,9 @@ import androidx.exifinterface.media.ExifInterface
 
 class ImageRotation {
 
+    /**
+     * Rotate bitmap to make it at the place
+     */
     fun rotateBitmap(uri: String): Bitmap? {
         val bitmap: Bitmap? = BitmapFactory.decodeFile(uri)
         Log.d("PROFILE_ACTIVITY", "$uri")
@@ -34,18 +37,13 @@ class ImageRotation {
         return rotatedBitmap
     }
 
-    fun rotateImage(source: Bitmap, angle: Float): Bitmap {
+
+    private fun rotateImage(source: Bitmap, angle: Float): Bitmap {
         val matrix = Matrix()
         matrix.postRotate(angle);
         return Bitmap.createBitmap(
             source, 0, 0, source.getWidth(), source.getHeight(),
             matrix, true
         )
-    }
-
-    fun cropImage(source: Bitmap): Bitmap {
-        val matrix = Matrix()
-        matrix.postScale(0.5f, 0.5f)
-        return Bitmap.createBitmap(source, 100, 100, 1422, 800, matrix, true)!!
     }
 }
