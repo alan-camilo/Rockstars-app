@@ -15,5 +15,5 @@ The 3rd party libs are the following:
 - Picasso
 - Kodein-di
 - Hyperion
-a
+
 The project is written in Kotlin.
