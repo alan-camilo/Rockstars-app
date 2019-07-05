@@ -54,7 +54,7 @@ class RockstarsViewModel(app: Application) : AndroidViewModel(app), KodeinAware 
     fun addToBookmark(index: Int) = viewModelScope.launch(Dispatchers.IO) { repository.addToBookmark(rockstars, index) }
 
     /**
-     * Unset a rockstar as a favourite
+     * Unset a rockstar as a favorite
      * @param index
      */
     fun removeFromBookmark(index: Int) =

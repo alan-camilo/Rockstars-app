@@ -9,7 +9,8 @@ import androidx.exifinterface.media.ExifInterface
 class ImageRotation {
 
     /**
-     * Rotate bitmap to make it at the place
+     * Rotates an image to put it upright
+     * @param uri
      */
     fun rotateBitmap(uri: String): Bitmap? {
         val bitmap: Bitmap? = BitmapFactory.decodeFile(uri)
@@ -21,7 +22,7 @@ class ImageRotation {
             ExifInterface.ORIENTATION_UNDEFINED
         )
 
-        var rotatedBitmap: Bitmap? = null
+        val rotatedBitmap: Bitmap?
         when (orientation) {
             ExifInterface.ORIENTATION_ROTATE_90 ->
                 rotatedBitmap = rotateImage(bitmap!!, 90F)
