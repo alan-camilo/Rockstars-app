@@ -36,6 +36,7 @@ class ProfileActivity : AppCompatActivity() {
     val PERMISSION_REQUEST_CODE = 2
     val REQUEST_IMAGE_CAPTURE = 1
     var currentPhotoPath: String = ""
+    var currentPhotoPathTMP: String = ""
     val PREF_FULL_NAME = "pref_full_name"
     private lateinit var model: ProfileViewModel
 
@@ -101,15 +102,16 @@ class ProfileActivity : AppCompatActivity() {
             storageDir /* directory */
         ).apply {
             // Save a file: path for use with ACTION_VIEW intents
-            currentPhotoPath = absolutePath
+            currentPhotoPathTMP = absolutePath
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
             val imageRotation = ImageRotation()
-            val rotatedBitmap = imageRotation.rotateBitmap(currentPhotoPath)
+            val rotatedBitmap = imageRotation.rotateBitmap(currentPhotoPathTMP)
             if (rotatedBitmap != null) {
+                currentPhotoPath = currentPhotoPathTMP
                 Log.d("PROFILE_ACTIVITY", "onActivityResult set profile picture")
                 profile_picture.setImageBitmap(rotatedBitmap)
             }
